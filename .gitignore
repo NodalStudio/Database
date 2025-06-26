@@ -1,0 +1,36 @@
+# Database data directory
+mysql-data/
+
+# Database logs
+*.log
+
+# Database temporary files
+*.tmp
+*.temp
+
+# SSL certificates and keys
+*.pem
+*.key
+*.crt
+
+# MySQL socket files
+*.sock
+
+# Database dumps
+*.sql.gz
+*.dump
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo

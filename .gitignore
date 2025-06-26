@@ -1,5 +1,6 @@
 # Database data directory
 mysql-data/
+backups/
 
 # Database logs
 *.log

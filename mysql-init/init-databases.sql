@@ -3,7 +3,7 @@
 
 -- Create Alumbra database and user
 CREATE DATABASE IF NOT EXISTS alumbra_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-CREATE USER IF NOT EXISTS 'alumbra_user'@'%' IDENTIFIED BY 'alumbra_secure_pass_2024';
+CREATE USER IF NOT EXISTS 'alumbra_user'@'%' IDENTIFIED BY 'alumbra_password';
 GRANT ALL PRIVILEGES ON alumbra_db.* TO 'alumbra_user'@'%';
 
 -- Create a read-only monitoring user (optional)

@@ -30,7 +30,7 @@ backup_database() {
         --port="$MYSQL_PORT" \
         --user="$MYSQL_USER" \
         --password="$MYSQL_PASSWORD" \
-        --databases alumbra \
+        --databases alumbra_db \
         --routines \
         --triggers \
         --single-transaction \

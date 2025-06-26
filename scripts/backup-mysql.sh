@@ -19,9 +19,9 @@ DATE=$(date +%Y%m%d_%H%M%S)
 # Create backup directory if it doesn't exist
 mkdir -p "$BACKUP_DIR"
 
-# Function to backup all databases
+# Function to backup alumbra database
 backup_database() {
-    echo "Starting backup of all database..."
+    echo "Starting backup of alumbra database..."
     
     BACKUP_FILE="$BACKUP_DIR/$DATE.sql"
     
@@ -30,12 +30,11 @@ backup_database() {
         --port="$MYSQL_PORT" \
         --user="$MYSQL_USER" \
         --password="$MYSQL_PASSWORD" \
-        --all-databases \
+        --databases alumbra \
         --routines \
         --triggers \
         --single-transaction \
         --flush-logs \
-        --master-data=2 \
         > "$BACKUP_FILE"
     
     # Compress the backup

@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  shared-mysql:
+    image: mysql:8.0
+    container_name: shared-mysql
+    restart: unless-stopped
+    ports:
+      - "8001:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=shared_root_secure_2024
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+      - ./mysql-init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+    networks:
+      - shared
+    labels:
+      - "traefik.enable=false"
+
+networks:
+  shared:
+    external: true
+
+volumes:
+  mysql-data:

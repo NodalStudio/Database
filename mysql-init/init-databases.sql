@@ -1,0 +1,17 @@
+-- Shared Database Initialization
+-- This script creates databases and users for all websites
+
+-- Create Alumbra database and user
+CREATE DATABASE IF NOT EXISTS alumbra_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER IF NOT EXISTS 'alumbra_user'@'%' IDENTIFIED BY 'alumbra_secure_pass_2024';
+GRANT ALL PRIVILEGES ON alumbra_db.* TO 'alumbra_user'@'%';
+
+-- Create a read-only monitoring user (optional)
+CREATE USER IF NOT EXISTS 'db_monitor'@'%' IDENTIFIED BY 'monitor_readonly_2024';
+GRANT SELECT ON *.* TO 'db_monitor'@'%';
+
+-- Flush privileges to apply changes
+FLUSH PRIVILEGES;
+
+-- Log successful initialization
+SELECT 'Shared database initialization completed successfully' AS status;

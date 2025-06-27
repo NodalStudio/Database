@@ -13,7 +13,7 @@ fi
 WEBSITE_NAME=$1
 DB_NAME="${WEBSITE_NAME}_db"
 DB_USER="${WEBSITE_NAME}_user"
-DB_PASS=${2:-"${WEBSITE_NAME}_secure_pass_$(date +%Y)"}
+DB_PASS=${2:-"${WEBSITE_NAME}_password"}
 
 echo "🔧 Adding new website to shared database"
 echo "   Website: $WEBSITE_NAME"
@@ -22,15 +22,15 @@ echo "   User: $DB_USER"
 echo
 
 # Check if shared MySQL is running
-if ! docker ps | grep -q "shared-mysql"; then
-    echo "❌ Shared MySQL is not running. Please start it first:"
-    echo "   cd shared-db && docker-compose up -d"
+if ! docker ps | grep -q "mysql"; then
+    echo "❌ MySQL is not running. Please start it first:"
+    echo "   cd /srv/services/database && docker-compose up -d"
     exit 1
 fi
 
 # Create database and user
 echo "📝 Creating database and user..."
-docker exec shared-mysql mysql -u root -pshared_root_secure_2024 << EOF
+docker exec mysql mysql -u root -pshared_root_secure_2024 << EOF
 CREATE DATABASE IF NOT EXISTS ${DB_NAME} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 CREATE USER IF NOT EXISTS '${DB_USER}'@'%' IDENTIFIED BY '${DB_PASS}';
 GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${DB_USER}'@'%';
@@ -42,7 +42,7 @@ if [ $? -eq 0 ]; then
     echo "✅ Website database created successfully!"
     echo
     echo "📋 Database Configuration:"
-    echo "   Host: shared-mysql"
+    echo "   Host: mysql"
     echo "   Port: 3306"
     echo "   Database: $DB_NAME"
     echo "   Username: $DB_USER"

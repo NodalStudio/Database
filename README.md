@@ -40,7 +40,7 @@ services:
       - DATABASE_HOST=shared-mysql
       - DATABASE_NAME=mywebsite_db
       - DATABASE_USERNAME=mywebsite_user
-      - DATABASE_PASSWORD=mywebsite_secure_pass_2024
+      - DATABASE_PASSWORD=${MYWEBSITE_DB_PASSWORD}
     networks:
       - shared
 ```
@@ -49,7 +49,7 @@ services:
 
 ### **Database Settings**
 - **Port**: 8001 (external) / 3306 (internal)
-- **Root Password**: `shared_root_secure_2024`
+- **Root Password**: `$MYSQL_ROOT_PASSWORD`, set in the host's environment (never in this repo)
 - **Character Set**: `utf8mb4_unicode_ci`
 - **Network**: `shared`
 
@@ -74,29 +74,29 @@ docker exec shared-mysql mysqladmin ping -h localhost
 
 ### **Database List**
 ```bash
-docker exec shared-mysql mysql -u root -pshared_root_secure_2024 -e "SHOW DATABASES;"
+docker exec shared-mysql mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "SHOW DATABASES;"
 ```
 
 ### **User List**
 ```bash
-docker exec shared-mysql mysql -u root -pshared_root_secure_2024 -e "SELECT User, Host FROM mysql.user;"
+docker exec shared-mysql mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "SELECT User, Host FROM mysql.user;"
 ```
 
 ## **Backup & Restore**
 
 ### **Backup All Databases**
 ```bash
-docker exec shared-mysql mysqldump -u root -pshared_root_secure_2024 --all-databases > backup_$(date +%Y%m%d).sql
+docker exec shared-mysql mysqldump -u root -p"$MYSQL_ROOT_PASSWORD" --all-databases > backup_$(date +%Y%m%d).sql
 ```
 
 ### **Backup Single Website**
 ```bash
-docker exec shared-mysql mysqldump -u root -pshared_root_secure_2024 website_db > website_backup.sql
+docker exec shared-mysql mysqldump -u root -p"$MYSQL_ROOT_PASSWORD" website_db > website_backup.sql
 ```
 
 ### **Restore Database**
 ```bash
-docker exec -i shared-mysql mysql -u root -pshared_root_secure_2024 website_db < website_backup.sql
+docker exec -i shared-mysql mysql -u root -p"$MYSQL_ROOT_PASSWORD" website_db < website_backup.sql
 ```
 
 ## **Security**
@@ -117,16 +117,16 @@ docker ps | grep shared-mysql
 docker logs shared-mysql
 
 # Test connection
-docker exec shared-mysql mysql -u root -pshared_root_secure_2024 -e "SELECT 1;"
+docker exec shared-mysql mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "SELECT 1;"
 ```
 
 ### **Performance Issues**
 ```bash
 # Check running queries
-docker exec shared-mysql mysql -u root -pshared_root_secure_2024 -e "SHOW PROCESSLIST;"
+docker exec shared-mysql mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "SHOW PROCESSLIST;"
 
 # Check database sizes
-docker exec shared-mysql mysql -u root -pshared_root_secure_2024 -e "
+docker exec shared-mysql mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "
 SELECT 
     table_schema AS 'Database',
     ROUND(SUM(data_length + index_length) / 1024 / 1024, 2) AS 'Size (MB)'
